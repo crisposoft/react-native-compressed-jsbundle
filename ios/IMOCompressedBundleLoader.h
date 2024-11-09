@@ -8,4 +8,7 @@
                  onProgress:(RCTSourceLoadProgressBlock)onProgress
                  onComplete:(RCTSourceLoadBlock)loadCallback;
 
++ (void)loadBundleAtURL:(NSURL *)sourceURL
+             onProgress:(RCTSourceLoadProgressBlock)onProgress
+             onComplete:(RCTSourceLoadBlock)loadCallback;
 @end

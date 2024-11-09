@@ -4,7 +4,7 @@
 #import "IMOReactSource.h"
 
 #define FALLBACK_TO_DEFAULT_LOADER()             \
-  [RCTJavaScriptLoader loadBundleAtURL:sourceUrl \
+  [RCTJavaScriptLoader loadBundleAtURL:sourceURL \
       onProgress:onProgress                      \
       onComplete:loadCallback];
 
@@ -15,16 +15,23 @@
                  onProgress:(RCTSourceLoadProgressBlock)onProgress
                  onComplete:(RCTSourceLoadBlock)loadCallback
 {
-    NSURL *sourceUrl = [delegate sourceURLForBridge:bridge];
+    NSURL *sourceURL = [delegate sourceURLForBridge:bridge];
     
-    if (!sourceUrl.isFileURL) {
+    [IMOCompressedBundleLoader loadBundleAtURL:sourceURL onProgress:onProgress onComplete:loadCallback];
+}
+
++ (void)loadBundleAtURL:(NSURL *)sourceURL
+             onProgress:(RCTSourceLoadProgressBlock)onProgress
+             onComplete:(RCTSourceLoadBlock)loadCallback
+{
+    if (!sourceURL.isFileURL) {
         FALLBACK_TO_DEFAULT_LOADER();
         return;
     }
     
     CFTimeInterval startTime = CACurrentMediaTime();
     
-    NSData *compressedData = [[NSData alloc] initWithContentsOfURL:sourceUrl options:NSDataReadingMappedIfSafe error:nil];
+    NSData *compressedData = [[NSData alloc] initWithContentsOfURL:sourceURL options:NSDataReadingMappedIfSafe error:nil];
     
     if (!compressedData) {
         FALLBACK_TO_DEFAULT_LOADER();
@@ -40,7 +47,7 @@
     
     IMOTraceDecompressionPerformance(startTime, compressedData.length, decompressedData.length);
 
-    RCTSource *source = [IMOReactSource sourceWithUrl:sourceUrl data:decompressedData];
+    RCTSource *source = [IMOReactSource sourceWithUrl:sourceURL data:decompressedData];
     loadCallback(nil, source);
 }
 @end
