@@ -10,6 +10,7 @@
 
 @implementation IMOCompressedBundleLoader
 
+#ifndef RCT_REMOVE_LEGACY_ARCH
 + (void)loadSourceForBridge:(RCTBridge *)bridge
              bridgeDelegate:(id<RCTBridgeDelegate>)delegate
                  onProgress:(RCTSourceLoadProgressBlock)onProgress
@@ -19,6 +20,7 @@
     
     [IMOCompressedBundleLoader loadBundleAtURL:sourceURL onProgress:onProgress onComplete:loadCallback];
 }
+#endif
 
 + (void)loadBundleAtURL:(NSURL *)sourceURL
              onProgress:(RCTSourceLoadProgressBlock)onProgress
